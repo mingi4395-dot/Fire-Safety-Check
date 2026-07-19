@@ -454,6 +454,13 @@
   .footer-left { font-size: 12px; color: var(--text-muted); line-height: 1.7; }
   .footer-left strong { color: var(--text-secondary); font-weight: 500; }
   .footer-right { font-size: 11px; color: var(--text-muted); text-align: right; line-height: 1.7; }
+  .footer-ig {
+    display: inline-flex; align-items: center; gap: 4px;
+    color: var(--text-secondary); text-decoration: none; font-weight: 500;
+    transition: color 0.15s;
+  }
+  .footer-ig:hover { color: var(--accent-text); }
+  .footer-ig-icon { width: 13px; height: 13px; flex-shrink: 0; }
 </style>
 </head>
 <body>
@@ -1322,7 +1329,10 @@
   <!-- 푸터 -->
   <div class="footer">
     <div class="footer-left">
-      <strong>작성자</strong> 국립소방연구원 소방위 OOO<br>
+      <strong>만든이</strong> <a class="footer-ig" href="https://www.instagram.com/minki_ban" target="_blank" rel="noopener noreferrer">
+        <svg class="footer-ig-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.5" y2="6.5"></line></svg>
+        @minki_ban
+      </a><br>
       <strong>작성일</strong> 2026.07.12<br>
       <strong>버전</strong> v1.0 초안
     </div>
