@@ -158,6 +158,11 @@
   .exempt-admin { background: #fef3c7; border-color: #f59e0b; color: #78350f; }
   .badge-unnecessary { background: var(--surface-1); color: var(--text-muted); border: 1px solid var(--border); }
   .badge-check { background: var(--accent-bg); color: var(--accent-text); border: 1px solid #93c5fd; }
+  .badge-grade-특급 { background: var(--danger-bg); color: var(--danger-text); border: 1px solid #fca5a5; }
+  .badge-grade-1급 { background: var(--warning-bg); color: var(--warning-text); border: 1px solid #fcd34d; }
+  .badge-grade-2급 { background: var(--accent-bg); color: var(--accent-text); border: 1px solid #93c5fd; }
+  .badge-grade-3급 { background: var(--success-bg); color: var(--success-text); border: 1px solid #86efac; }
+  .badge-grade-없음 { background: var(--surface-1); color: var(--text-muted); border: 1px solid var(--border); }
 
   /* 그룹 타이틀 */
   .group-title {
@@ -435,25 +440,34 @@
   @media(max-width:600px){ .dj-업종grid{grid-template-columns:1fr;} }
 
   /* 사용 방법 안내 (탭별 접이식 박스) */
-  .howto { background:var(--accent-bg); border:1px solid #93c5fd; border-radius:var(--radius); margin-bottom:1rem; overflow:hidden; }
-  .howto-head { display:flex; align-items:center; gap:8px; padding:10px 14px; cursor:pointer; user-select:none; font-size:13px; font-weight:600; color:var(--accent-text); transition:background 0.1s; }
-  .howto-head:hover { background:rgba(29,78,216,0.06); }
-  .howto-head .chevron { margin-left:auto; }
+  .howto { background:var(--surface-1); border:1px solid var(--border); border-radius:var(--radius); margin-bottom:1rem; overflow:hidden; }
+  .howto-head { display:flex; align-items:center; gap:8px; padding:10px 14px; cursor:pointer; user-select:none; font-size:13px; font-weight:600; color:var(--text-secondary); transition:background 0.1s; }
+  .howto-head:hover { background:var(--surface-2); }
+  .howto-head .chevron { margin-left:auto; font-size:11px; }
   .howto-body { display:none; padding:2px 14px 14px 38px; font-size:13px; color:var(--text-secondary); line-height:1.8; }
   .howto-body.show { display:block; }
   .howto-body ol { padding-left:1.1rem; }
   .howto-body li { margin-bottom:5px; }
   .howto-body li b { color:var(--text); font-weight:600; }
 
-  /* 테스트 배너 */
+  /* 테스트 배너 (접이식) */
   .test-banner {
     background: #fef3c7; border: 1px solid #f59e0b;
-    border-radius: var(--radius); padding: 10px 16px;
-    margin-bottom: 1rem; display: flex; align-items: flex-start; gap: 10px;
-    font-size: 13px; color: #78350f; line-height: 1.6;
+    border-radius: var(--radius); margin-bottom: 1rem; overflow: hidden;
   }
-  .test-banner i { font-size: 18px; flex-shrink: 0; margin-top: 1px; color: #d97706; }
-  .test-banner strong { color: #92400e; }
+  .test-banner-head {
+    display: flex; align-items: center; gap: 8px;
+    padding: 10px 16px; cursor: pointer; user-select: none;
+    font-size: 13px; font-weight: 600; color: #92400e;
+  }
+  .test-banner-head i.ti-flask { font-size: 18px; flex-shrink: 0; color: #d97706; }
+  .test-banner-head .chevron { color: #92400e; }
+  .test-banner-body {
+    display: none; padding: 0 16px 12px 42px;
+    font-size: 13px; color: #78350f; line-height: 1.7;
+  }
+  .test-banner-body.show { display: block; }
+  .test-banner-body strong { color: #92400e; }
 
   /* 푸터 */
   .footer {
@@ -507,14 +521,17 @@
     .exempt-notice-a { background: #10321c; color: #4ade80; border-color: #166534; }
     .exempt-notice-b { background: #3a1f0d; color: #fb923c; border-color: #9a3412; }
     .exempt-notice { border-color: #78350f; }
-    .test-banner { background: #3a2c0d; border-color: #92400e; color: #fcd34d; }
-    .test-banner i { color: #fbbf24; }
-    .test-banner strong { color: #fbbf24; }
+    .test-banner { background: #3a2c0d; border-color: #92400e; }
+    .test-banner-head { color: #fcd34d; }
+    .test-banner-head i.ti-flask { color: #fbbf24; }
+    .test-banner-head .chevron { color: #fcd34d; }
+    .test-banner-body { color: #fcd34d; }
+    .test-banner-body strong { color: #fbbf24; }
     .version-check { border-color: #78350f; }
-    .badge-required, .badge-dj-required { border-color: #7f1d1d; }
-    .badge-exemptable { border-color: #78350f; }
-    .badge-check, .badge-dj-condition, .complex-result-tag, .dj-notice, .howto { border-color: #1e40af; }
-    .howto-head:hover { background: rgba(96,165,250,0.08); }
+    .badge-required, .badge-dj-required, .badge-grade-특급 { border-color: #7f1d1d; }
+    .badge-exemptable, .badge-grade-1급 { border-color: #78350f; }
+    .badge-check, .badge-dj-condition, .complex-result-tag, .dj-notice, .badge-grade-2급 { border-color: #1e40af; }
+    .badge-grade-3급 { border-color: #166534; }
   }
 </style>
 </head>
@@ -523,22 +540,21 @@
 
   <div class="header">
     <h1>트리렙시 <span style="font-size:13px; font-weight:400; color:var(--text-muted); letter-spacing:0.06em; vertical-align:middle;">TRILEPSI</span></h1>
-    <p>소방시설법 · 다중이용업소법 · 위험물안전관리법 기반 설치기준 통합 판단도구</p>
-    <span class="version-badge">
-      <i class="ti ti-alert-triangle"></i>
-      테스트 버전 (v1.0 초안) — 실무 적용 전 관련 법령 원문을 반드시 확인하세요
-    </span>
-    <span class="version-badge" id="rulesBadge" style="margin-left:6px;">
+    <p>처음 하는 예방업무, 설치기준부터 막히지 않게</p>
+    <span class="version-badge" id="rulesBadge">
       <i class="ti ti-database" aria-hidden="true"></i>
       판정규칙 확인 중...
     </span>
   </div>
 
-  <!-- 테스트 배포 안내 배너 (전역) -->
+  <!-- 테스트 배포 안내 배너 (전역, 접이식) -->
   <div class="test-banner">
-    <i class="ti ti-flask" aria-hidden="true"></i>
-    <div>
-      <strong>테스트 버전 안내</strong><br>
+    <div class="test-banner-head" onclick="toggle(this)">
+      <i class="ti ti-flask" aria-hidden="true"></i>
+      테스트 버전 안내
+      <span class="chevron" style="font-size:11px;">▼</span>
+    </div>
+    <div class="test-banner-body">
       이 도구는 테스트 배포용입니다. 판단 결과는 참고용이며, 반드시
       <strong>국가법령정보센터(law.go.kr)에서 최신 법령을 확인</strong>하세요.
       기존 건축물 중 노유자시설·의료시설·공동구·지하구는 <strong>소급 적용 기준(법 제13조)</strong>이 있어 별도 확인이 필요합니다.
@@ -550,6 +566,7 @@
     <button class="main-tab active" onclick="switchMainTab('fire')">소방시설 설치기준</button>
     <button class="main-tab" onclick="switchMainTab('dj')">다중이용업소 안전시설</button>
     <button class="main-tab" onclick="switchMainTab('wm')">위험물 소화·경보설비</button>
+    <button class="main-tab" onclick="switchMainTab('fp')">화재예방법 소방안전관리</button>
   </div>
 
   <!-- 소방시설 패널 -->
@@ -558,7 +575,7 @@
   <div class="howto">
     <div class="howto-head" onclick="toggle(this)">
       <i class="ti ti-help-circle"></i> 사용 방법
-      <i class="ti ti-chevron-down chevron"></i>
+      <span class="chevron">▼</span>
     </div>
     <div class="howto-body">
       <ol>
@@ -982,7 +999,7 @@
     <div class="howto">
       <div class="howto-head" onclick="toggle(this)">
         <i class="ti ti-help-circle"></i> 사용 방법
-        <i class="ti ti-chevron-down chevron"></i>
+        <span class="chevron">▼</span>
       </div>
       <div class="howto-body">
         <ol>
@@ -1198,7 +1215,7 @@
     <div class="howto">
       <div class="howto-head" onclick="toggle(this)">
         <i class="ti ti-help-circle"></i> 사용 방법
-        <i class="ti ti-chevron-down chevron"></i>
+        <span class="chevron">▼</span>
       </div>
       <div class="howto-body">
         <ol>
@@ -1424,6 +1441,183 @@
     </div>
 
   </div><!-- /wmPanel -->
+
+  <!-- 화재예방법 패널 -->
+  <div id="fpPanel" class="main-panel">
+
+  <div class="howto">
+    <div class="howto-head" onclick="toggle(this)">
+      <i class="ti ti-help-circle"></i> 사용 방법
+      <span class="chevron">▼</span>
+    </div>
+    <div class="howto-body">
+      <ol>
+        <li>층수(지상·지하), 높이, 연면적, 아파트 여부·세대수를 입력하세요.</li>
+        <li>설치된 <b>소화설비</b>(옥내소화전·스프링클러·물분무등·간이스프링클러·자동화재탐지설비)를 체크하세요. 소방시설법 탭에서 이미 판단한 결과와 동일하게 입력하면 됩니다.</li>
+        <li>가연성가스 저장량, 지하구 해당여부 등 <b>특수조건</b>은 해당하는 경우에만 체크하세요.</li>
+        <li>기숙사·의료시설·노유자시설·수련시설·숙박시설 등은 <b>소방안전관리보조자</b> 필요여부 판단에 쓰입니다.</li>
+        <li><b>"소방안전관리자 등급 판단"</b> 버튼을 누르면 소방안전관리대상물 해당여부·등급·선임인원과 보조자 필요여부가 나옵니다. 항목을 클릭하면 근거 조문이 펼쳐집니다.</li>
+        <li>자격요건(경력·자격증 등)은 사람에 관한 사항이라 판정하지 않으며, 근거조문만 안내합니다.</li>
+        <li>결과 상단 <b>"검토의견서 초안"</b> 버튼으로 공문 형식 요약을 생성해 복사할 수 있습니다.</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="notice">
+    <i class="ti ti-info-circle"></i>
+    <strong>적용 안내:</strong> 화재의 예방 및 안전관리에 관한 법률 시행령 별표4·5(소방안전관리자·보조자 선임기준), 별표2·3(특수가연물)을 기준으로 판단합니다.
+    등급별 <strong>자격 요건</strong>(경력·자격증)은 판정하지 않으니 근거조문을 참고해 별도 확인하세요.
+    용도(업종)는 직접 조건이 아니며, 용도·규모에 따라 소방시설법상 정해지는 <strong>소방시설 설치의무</strong>를 통해 간접적으로 반영됩니다.
+  </div>
+
+  <div class="howto">
+    <div class="howto-head" onclick="toggle(this)">
+      <i class="ti ti-building-skyscraper"></i> 등급별 대략적 규모 참고
+      <span class="chevron">▼</span>
+    </div>
+    <div class="howto-body">
+      <ol>
+        <li><b>특급</b> — 초고층 아파트(50층 또는 200m 이상) / 대형 복합시설(비아파트 30층 또는 120m 이상, 또는 연면적 10만㎡ 이상). 예: 초고층 주상복합, 대형 복합몰</li>
+        <li><b>1급</b> — 준고층 아파트(30층 또는 120m 이상) / 대형 건물(연면적 1만5천㎡ 이상, 또는 11층 이상 비아파트) / 가연성가스 1천톤 이상 저장시설</li>
+        <li><b>2급</b> — 옥내소화전·스프링클러 등 주요 소방시설 설치의무가 있는 중형 건물, 가스제조·저장시설(100~1천톤), 지하구, 보물·국보 지정 목조건축물</li>
+        <li><b>3급</b> — 간이스프링클러·자동화재탐지설비 설치의무가 있는 소규모~중형 건물</li>
+      </ol>
+      <div style="font-size:11px;color:var(--text-muted);margin-top:4px;">※ 실제 판정은 아래 입력값과 별표4 조문을 기준으로 하며, 위 설명은 감을 잡기 위한 참고용입니다.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <p class="section-label">건물 정보 입력</p>
+    <div class="input-grid">
+      <div class="field"><label>지상층수</label><input type="text" id="fp지상층수" placeholder="예: 15 (층)"></div>
+      <div class="field"><label>지하층수</label><input type="text" id="fp지하층수" placeholder="예: 2 (층, 없으면 비워둠)"></div>
+      <div class="field"><label>건물높이</label><input type="text" id="fp높이" placeholder="예: 60 (m, 모르면 비워둠)"></div>
+      <div class="field"><label>연면적</label><input type="text" id="fp연면적" placeholder="예: 20000 (㎡)"></div>
+    </div>
+    <div class="check-grid" style="margin-top:0.75rem;">
+      <label class="check-item"><input type="checkbox" id="fp아파트" onchange="document.getElementById('fp세대수필드').style.display=this.checked?'':'none'">
+        <span class="cb-content"><span class="cb-label">아파트</span><span class="cb-desc">「건축법 시행령」 별표1 제2호가목의 아파트</span></span>
+      </label>
+      <label class="check-item"><input type="checkbox" id="fp연립주택">
+        <span class="cb-content"><span class="cb-label">연립주택</span><span class="cb-desc">1급 연면적 기준(1.5만㎡)에서 제외되는 용도</span></span>
+      </label>
+    </div>
+    <div class="input-grid" id="fp세대수필드" style="display:none;margin-top:0.75rem;">
+      <div class="field"><label>아파트 세대수</label><input type="text" id="fp세대수" placeholder="예: 450 (세대)"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <p class="section-label">소화설비 설치의무 대상여부</p>
+    <div style="font-size:11px;color:var(--text-muted);margin-bottom:8px;padding:8px 10px;background:var(--surface-1);border-radius:var(--radius);border:1px solid var(--border);">
+      ⚠️ 별표4는 <strong>실제 설치되어 있는지</strong>가 아니라 소방시설법상 <strong>설치의무가 있는지</strong>를 기준으로 합니다. 소방시설법 탭에서 이미 판단했다면 그 결과(설치필요 여부)를 그대로 체크하세요. 실제로 설치돼 있어도 법정 의무대상이 아니면 체크하지 마세요.
+    </div>
+    <div class="check-grid">
+      <label class="check-item"><input type="checkbox" id="fp옥내소화전">
+        <span class="cb-content"><span class="cb-label">옥내소화전설비 설치의무 대상</span></span>
+      </label>
+      <label class="check-item"><input type="checkbox" id="fp스프링클러">
+        <span class="cb-content"><span class="cb-label">스프링클러설비 설치의무 대상</span></span>
+      </label>
+      <label class="check-item"><input type="checkbox" id="fp물분무등">
+        <span class="cb-content"><span class="cb-label">물분무등소화설비 설치의무 대상</span><span class="cb-desc">호스릴 방식만 설치의무인 경우는 제외</span></span>
+      </label>
+      <label class="check-item"><input type="checkbox" id="fp간이SP">
+        <span class="cb-content"><span class="cb-label">간이스프링클러설비 설치의무 대상</span><span class="cb-desc">주택전용 간이스프링클러는 제외</span></span>
+      </label>
+      <label class="check-item"><input type="checkbox" id="fp자탐">
+        <span class="cb-content"><span class="cb-label">자동화재탐지설비 설치의무 대상</span></span>
+      </label>
+    </div>
+  </div>
+
+  <div class="card">
+    <p class="section-label">특수조건</p>
+    <div class="input-grid" style="margin-bottom:0.75rem;">
+      <div class="field">
+        <label>가연성가스 저장·취급량</label>
+        <select id="fp가스톤수">
+          <option value="">해당없음</option>
+          <option value="100미만">100톤 미만</option>
+          <option value="100~1000">100톤 이상 ~ 1천톤 미만</option>
+          <option value="1000이상">1천톤 이상</option>
+        </select>
+      </div>
+    </div>
+    <div class="check-grid">
+      <label class="check-item"><input type="checkbox" id="fp지하구">
+        <span class="cb-content"><span class="cb-label">지하구</span></span>
+      </label>
+      <label class="check-item"><input type="checkbox" id="fp도시가스제조">
+        <span class="cb-content"><span class="cb-label">가스 제조설비 + 도시가스사업 허가대상</span></span>
+      </label>
+      <label class="check-item"><input type="checkbox" id="fp보물국보목조">
+        <span class="cb-content"><span class="cb-label">보물·국보 지정 목조건축물</span></span>
+      </label>
+      <label class="check-item"><input type="checkbox" id="fp제외위험물제조소등">
+        <span class="cb-content"><span class="cb-label">위험물 제조소등 해당</span><span class="cb-desc">특급·1급 대상에서 제외(별표4 비고1)</span></span>
+      </label>
+      <label class="check-item"><input type="checkbox" id="fp제외동식물원등">
+        <span class="cb-content"><span class="cb-label">동·식물원 또는 불연성 물품 저장창고</span><span class="cb-desc">특급·1급 대상에서 제외(별표4 비고1)</span></span>
+      </label>
+    </div>
+  </div>
+
+  <div class="card">
+    <p class="section-label">보조자 판정용 용도</p>
+    <div class="check-grid">
+      <label class="check-item"><input type="checkbox" id="fp기숙사">
+        <span class="cb-content"><span class="cb-label">기숙사 (공동주택 중)</span></span>
+      </label>
+      <label class="check-item"><input type="checkbox" id="fp의료시설">
+        <span class="cb-content"><span class="cb-label">의료시설</span></span>
+      </label>
+      <label class="check-item"><input type="checkbox" id="fp노유자시설">
+        <span class="cb-content"><span class="cb-label">노유자시설</span></span>
+      </label>
+      <label class="check-item"><input type="checkbox" id="fp수련시설">
+        <span class="cb-content"><span class="cb-label">수련시설</span></span>
+      </label>
+      <label class="check-item"><input type="checkbox" id="fp숙박시설" onchange="document.getElementById('fp숙박필드').style.display=this.checked?'':'none'">
+        <span class="cb-content"><span class="cb-label">숙박시설</span></span>
+      </label>
+    </div>
+    <div id="fp숙박필드" style="display:none;margin-top:0.75rem;">
+      <div class="input-grid" style="margin-bottom:0.5rem;">
+        <div class="field"><label>숙박시설 바닥면적 합계</label><input type="text" id="fp숙박바닥면적" placeholder="예: 1200 (㎡)"></div>
+      </div>
+      <div class="check-grid">
+        <label class="check-item"><input type="checkbox" id="fp숙박24시간">
+          <span class="cb-content"><span class="cb-label">관계인 24시간 상시 근무</span><span class="cb-desc">바닥면적 합계 1,500㎡ 미만 + 상시근무 시 보조자 대상 제외</span></span>
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn-run" onclick="fpRun()">
+      <i class="ti ti-search"></i> 소방안전관리자 등급 판단
+    </button>
+    <button class="btn-reset" onclick="fpReset()">
+      <i class="ti ti-refresh"></i> 초기화
+    </button>
+  </div>
+
+  <!-- 결과 -->
+  <div id="fpResult" style="display:none;">
+    <div class="building-summary" id="fpSummary"></div>
+    <div class="card" style="padding:1.25rem;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem; flex-wrap:wrap; gap:8px;">
+        <p class="section-label" style="margin-bottom:0;">판단 결과</p>
+        <button class="btn-opinion" onclick="openOpinion('fp')">
+          <i class="ti ti-file-text" aria-hidden="true"></i> 검토의견서 초안
+        </button>
+      </div>
+      <div id="fpResultList"></div>
+    </div>
+  </div>
+
+  </div><!-- /fpPanel -->
 
   <!-- 푸터 -->
   <div class="footer">
@@ -2580,11 +2774,12 @@ function run(){
 /* ══ 메인 탭 전환 ══ */
 function switchMainTab(tab){
   document.querySelectorAll('.main-tab').forEach((t,i)=>{
-    t.classList.toggle('active',(tab==='fire'&&i===0)||(tab==='dj'&&i===1)||(tab==='wm'&&i===2));
+    t.classList.toggle('active',(tab==='fire'&&i===0)||(tab==='dj'&&i===1)||(tab==='wm'&&i===2)||(tab==='fp'&&i===3));
   });
   document.getElementById('firePanel').classList.toggle('show', tab==='fire');
   document.getElementById('djPanel').classList.toggle('show', tab==='dj');
   document.getElementById('wmPanel').classList.toggle('show', tab==='wm');
+  document.getElementById('fpPanel').classList.toggle('show', tab==='fp');
 }
 
 /* ══ 다중이용업소 판단 ══ */
@@ -3449,6 +3644,211 @@ function wmRun(){
   document.getElementById('wmResult').scrollIntoView({behavior:'smooth',block:'start'});
 }
 
+/* ══ 화재예방법 소방안전관리자 등급 판단 ══ */
+let _fpLastResults = [], _fpLastGrade = null, _fpLastSummary = '';
+
+function fpReset(){
+  ['fp지상층수','fp지하층수','fp높이','fp연면적','fp세대수','fp숙박바닥면적'].forEach(id=>{
+    const el=document.getElementById(id); if(el) el.value='';
+  });
+  ['fp아파트','fp연립주택','fp옥내소화전','fp스프링클러','fp물분무등','fp간이SP','fp자탐',
+   'fp지하구','fp도시가스제조','fp보물국보목조','fp제외위험물제조소등','fp제외동식물원등',
+   'fp기숙사','fp의료시설','fp노유자시설','fp수련시설','fp숙박시설','fp숙박24시간'].forEach(id=>{
+    const el=document.getElementById(id); if(el) el.checked=false;
+  });
+  const gas=document.getElementById('fp가스톤수'); if(gas) gas.value='';
+  document.getElementById('fp세대수필드').style.display='none';
+  document.getElementById('fp숙박필드').style.display='none';
+  document.getElementById('fpResult').style.display='none';
+}
+
+function fpRun(){
+  const 지상 = parseNum(document.getElementById('fp지상층수').value)||0;
+  const 지하 = parseNum(document.getElementById('fp지하층수').value)||0;
+  const 높이 = parseNum(document.getElementById('fp높이').value)||0;
+  const 연면적 = parseNum(document.getElementById('fp연면적').value)||0;
+  const 아파트 = document.getElementById('fp아파트').checked;
+  const 세대수 = parseNum(document.getElementById('fp세대수').value)||0;
+  const 연립주택 = document.getElementById('fp연립주택').checked;
+  const 옥내소화전 = document.getElementById('fp옥내소화전').checked;
+  const 스프링클러 = document.getElementById('fp스프링클러').checked;
+  const 물분무등 = document.getElementById('fp물분무등').checked;
+  const 간이SP = document.getElementById('fp간이SP').checked;
+  const 자탐 = document.getElementById('fp자탐').checked;
+  const 가스톤수 = document.getElementById('fp가스톤수').value;
+  const 지하구 = document.getElementById('fp지하구').checked;
+  const 도시가스제조 = document.getElementById('fp도시가스제조').checked;
+  const 보물국보목조 = document.getElementById('fp보물국보목조').checked;
+  const 제외위험물 = document.getElementById('fp제외위험물제조소등').checked;
+  const 제외동식물원 = document.getElementById('fp제외동식물원등').checked;
+  const 기숙사 = document.getElementById('fp기숙사').checked;
+  const 의료시설 = document.getElementById('fp의료시설').checked;
+  const 노유자시설 = document.getElementById('fp노유자시설').checked;
+  const 수련시설 = document.getElementById('fp수련시설').checked;
+  const 숙박시설 = document.getElementById('fp숙박시설').checked;
+  const 숙박바닥면적 = parseNum(document.getElementById('fp숙박바닥면적').value)||0;
+  const 숙박24시간 = document.getElementById('fp숙박24시간').checked;
+
+  if(!지상 && !지하 && !연면적 && !아파트){
+    alert('층수 또는 연면적을 입력해주세요.');
+    return;
+  }
+
+  const 총층수 = 지상 + 지하;
+  const 특급1급제외 = 제외위험물 || 제외동식물원;
+
+  let 등급 = null, 등급사유 = '';
+
+  // 특급 (별표4 제1호)
+  if(!특급1급제외){
+    if(아파트 && (지상>=50 || 높이>=200)){
+      등급='특급';
+      등급사유 = `아파트 ${지상>=50?`지상 ${지상}층(50층 이상)`:`높이 ${높이}m(200m 이상)`}`;
+    } else if(!아파트 && (총층수>=30 || 높이>=120)){
+      등급='특급';
+      등급사유 = `${총층수>=30?`지하 포함 총 ${총층수}층(30층 이상)`:`높이 ${높이}m(120m 이상)`}`;
+    } else if(!아파트 && 연면적>=100000){
+      등급='특급';
+      등급사유 = `연면적 ${연면적.toLocaleString()}㎡ (10만㎡ 이상)`;
+    }
+  }
+
+  // 1급 (별표4 제2호, 특급 및 위험물제조소등·동식물원 등 제외)
+  if(!등급 && !특급1급제외){
+    if(아파트 && (지상>=30 || 높이>=120)){
+      등급='1급';
+      등급사유 = `아파트 ${지상>=30?`지상 ${지상}층(30층 이상)`:`높이 ${높이}m(120m 이상)`}`;
+    } else if(!아파트 && !연립주택 && 연면적>=15000){
+      등급='1급';
+      등급사유 = `연면적 ${연면적.toLocaleString()}㎡ (1만5천㎡ 이상, 아파트·연립주택 제외)`;
+    } else if(!아파트 && 지상>=11){
+      등급='1급';
+      등급사유 = `지상층 ${지상}층 (11층 이상, 아파트 제외)`;
+    } else if(가스톤수==='1000이상'){
+      등급='1급';
+      등급사유 = '가연성가스 1천톤 이상 저장·취급';
+    }
+  }
+
+  // 2급 (별표4 제3호, 특급·1급 제외)
+  if(!등급){
+    if(옥내소화전||스프링클러||물분무등){
+      const 설비목록=[옥내소화전?'옥내소화전':'',스프링클러?'스프링클러':'',물분무등?'물분무등소화설비':''].filter(Boolean).join('·');
+      등급='2급';
+      등급사유 = `${설비목록} 설치대상 (호스릴 방식만 설치된 경우는 제외)`;
+    } else if(도시가스제조 || 가스톤수==='100~1000'){
+      등급='2급';
+      등급사유 = 도시가스제조?'가스제조설비 + 도시가스사업 허가대상':'가연성가스 100톤 이상 1천톤 미만 저장·취급';
+    } else if(지하구){
+      등급='2급';
+      등급사유 = '지하구';
+    } else if(보물국보목조){
+      등급='2급';
+      등급사유 = '보물·국보 지정 목조건축물';
+    }
+  }
+
+  // 3급 (별표4 제4호, 특급·1급·2급 제외)
+  if(!등급){
+    if(간이SP){
+      등급='3급';
+      등급사유 = '간이스프링클러설비 설치대상 (주택전용 간이스프링클러 제외)';
+    } else if(자탐){
+      등급='3급';
+      등급사유 = '자동화재탐지설비 설치대상';
+    }
+  }
+
+  const results = [];
+  function fpadd(명칭, 뱃지클래스, 뱃지텍스트, 설명, 근거){
+    results.push({명칭,뱃지클래스,뱃지텍스트,설명,근거});
+  }
+
+  const 등급규모참고 = {
+    '특급':'참고: 초고층 아파트(50층·200m 이상) 또는 대형 복합시설(비아파트 30층·120m 이상, 연면적 10만㎡ 이상) 규모대에 해당하는 등급입니다.',
+    '1급':'참고: 준고층 아파트(30층·120m 이상) 또는 대형 건물(연면적 1만5천㎡ 이상, 11층 이상) 규모대에 해당하는 등급입니다.',
+    '2급':'참고: 옥내소화전·스프링클러 등 주요 소방시설 설치의무가 있는 중형 건물, 가스저장시설, 지하구 규모대에 해당하는 등급입니다.',
+    '3급':'참고: 간이스프링클러·자동화재탐지설비 설치의무가 있는 소규모~중형 건물 규모대에 해당하는 등급입니다.',
+  };
+  if(등급){
+    fpadd('소방안전관리대상물 등급', `badge-grade-${등급}`, 등급,
+      `${등급} 소방안전관리대상물 — 해당 사유: ${등급사유}. 소방안전관리자 1명 이상 선임 필요. 자격요건(경력·자격증)은 등급별로 다르므로 별표4 나목을 확인하세요. 이 도구는 사람의 자격·경력은 판정하지 않습니다. ${등급규모참고[등급]}`,
+      '시행령 별표4 (제25조제1항 관련)');
+  } else {
+    fpadd('소방안전관리대상물 해당여부', 'badge-grade-없음', '해당없음',
+      '입력된 조건으로는 소방안전관리대상물(별표4)에 해당하지 않습니다. 특정소방대상물 관계인은 법 제24조제5항의 일반 관리업무(소방계획서 작성·자위소방대 구성 제외)만 적용됩니다.',
+      '법 제24조제5항 / 시행령 별표4 (제25조제1항 관련)');
+  }
+
+  // 보조자 판정 (별표4 대상물일 때만)
+  if(등급){
+    let 보조자필요 = false, 보조자인원 = 0, 보조자사유 = '';
+    if(아파트 && 세대수>=300){
+      보조자필요 = true;
+      const 초과 = Math.max(0, 세대수-300);
+      보조자인원 = 1 + Math.floor(초과/300);
+      보조자사유 = `아파트 ${세대수.toLocaleString()}세대 (300세대 이상, 초과 300세대마다 1명 추가)`;
+    } else if(!아파트 && !연립주택 && 연면적>=15000){
+      보조자필요 = true;
+      const 초과 = Math.max(0, 연면적-15000);
+      보조자인원 = 1 + Math.floor(초과/15000);
+      보조자사유 = `연면적 ${연면적.toLocaleString()}㎡ (1만5천㎡ 이상, 초과 1만5천㎡마다 1명 추가 — 방재실 24시간 상시근무 + 소방펌프차 등 운용 시 기준이 3만㎡로 완화되니 해당 여부 확인 필요)`;
+    } else if(기숙사||의료시설||노유자시설||수련시설||숙박시설){
+      const 숙박제외 = 숙박시설 && !기숙사 && !의료시설 && !노유자시설 && !수련시설 && 숙박바닥면적>0 && 숙박바닥면적<1500 && 숙박24시간;
+      if(!숙박제외){
+        보조자필요 = true;
+        보조자인원 = 1;
+        const 용도목록=[기숙사?'기숙사':'',의료시설?'의료시설':'',노유자시설?'노유자시설':'',수련시설?'수련시설':'',숙박시설?'숙박시설':''].filter(Boolean).join('·');
+        보조자사유 = `${용도목록} 해당 — 관할 소방서장이 야간·휴일 미이용을 확인한 경우 선임 면제 가능`;
+      }
+    }
+
+    if(보조자필요){
+      fpadd('소방안전관리보조자', 'badge-required', '선임필요',
+        `선임 필요 — 사유: ${보조자사유}. 선임인원: ${보조자인원}명 이상.`,
+        '시행령 별표5 (제25조제2항 관련)');
+    } else {
+      fpadd('소방안전관리보조자', 'badge-unnecessary', '해당없음',
+        '입력된 조건으로는 보조자 선임대상(별표5)에 해당하지 않습니다.',
+        '시행령 별표5 (제25조제2항 관련)');
+    }
+  }
+
+  // 요약
+  document.getElementById('fpSummary').innerHTML =
+    `${아파트?'아파트':'특정소방대상물'} &nbsp;|&nbsp; `+
+    (지상||지하?`<strong>지상 ${지상}층${지하?` / 지하 ${지하}층`:''}</strong>`:'층수 미입력')+
+    (연면적?` &nbsp;|&nbsp; <strong>${연면적.toLocaleString()}㎡</strong>`:'')+
+    (높이?` &nbsp;|&nbsp; 높이 ${높이}m`:'');
+
+  const list = document.getElementById('fpResultList');
+  list.innerHTML='';
+  results.forEach(r=>{
+    const el=document.createElement('div'); el.className='result-item';
+    el.innerHTML=`<div class="result-head" onclick="toggle(this)"><span class="badge ${r.뱃지클래스}">${r.뱃지텍스트}</span><span class="result-name">${r.명칭}</span><i class="ti ti-chevron-down chevron"></i></div>
+      <div class="result-body"><div>${r.설명}</div><div class="basis" style="margin-top:8px;">근거 조문: <span>${r.근거}</span></div></div>`;
+    list.appendChild(el);
+  });
+
+  // 특수가연물 저장기준 참고 (항상 노출)
+  const 특수가연물참고 = document.createElement('div');
+  특수가연물참고.className='notice';
+  특수가연물참고.style.marginTop='0.75rem';
+  특수가연물참고.innerHTML = `<i class="ti ti-flame"></i> <strong>특수가연물 저장기준 참고 (별표3)</strong><br>
+    쌓는 높이 10m 이하(살수설비·대형소화기 비치 시 15m 이하), 바닥면적 50㎡ 이하(석탄·목탄류 200㎡, 살수설비 등 설치 시 200㎡·300㎡)로 제한.
+    실외 저장 시 대지경계선·도로·인접건축물과 6m 이상 이격(0.9m 이상 높은 내화구조 벽체 설치 시 예외). 저장 장소에는 품명·최대저장수량·단위중량·관리책임자·연락처가 담긴 표지 설치 필요.
+    품명별 수량기준(별표2)은 소방시설법 탭의 특수가연물 배수 입력을 참고하세요.`;
+  list.appendChild(특수가연물참고);
+
+  document.getElementById('fpResult').style.display='';
+  document.getElementById('fpResult').scrollIntoView({behavior:'smooth',block:'start'});
+
+  // 검토의견서용 데이터 저장
+  _fpLastResults = results;
+  _fpLastGrade = 등급;
+  _fpLastSummary = document.getElementById('fpSummary').innerHTML;
+}
+
 function djToggle(head){
   head.nextElementSibling.classList.toggle('show');
   head.querySelector('.chevron').classList.toggle('open');
@@ -3499,11 +3899,21 @@ let _lastSummary = '';
 let _lastB = null; // 판정 실행 시점의 입력값(getB() 결과)을 저장 — 검토의견서 생성 시 재계산하지 않고 그대로 재사용
 let _lastDongui = null; // 판정 실행 시점의 건축허가등 동의대상물 해당 여부 판정 결과(checkDongui/checkComplexDongui) 저장
 
-function openOpinion(){
-  if(!_lastResults.length){ alert('먼저 판단을 실행해주세요.'); return; }
-  generateOpinion();
+let _opinionTab = 'fire';
+function openOpinion(tab){
+  _opinionTab = tab || 'fire';
+  if(_opinionTab==='fp'){
+    if(!_fpLastResults.length){ alert('먼저 판단을 실행해주세요.'); return; }
+    generateFpOpinion();
+  } else {
+    if(!_lastResults.length){ alert('먼저 판단을 실행해주세요.'); return; }
+    generateOpinion();
+  }
   document.getElementById('opinionModal').classList.add('show');
   document.body.style.overflow='hidden';
+}
+function refreshOpinion(){
+  if(_opinionTab==='fp') generateFpOpinion(); else generateOpinion();
 }
 function closeOpinion(){
   document.getElementById('opinionModal').classList.remove('show');
@@ -3592,7 +4002,72 @@ function generateOpinion(){
   document.getElementById('opinionOutput').textContent=lines.join('\n');
 
   ['opBuildingName','opAddress','opOwner','opReviewer'].forEach(id=>{
-    document.getElementById(id).oninput=generateOpinion;
+    document.getElementById(id).oninput=refreshOpinion;
+  });
+}
+
+function generateFpOpinion(){
+  const 건물명=document.getElementById('opBuildingName').value||'(건물명 미입력)';
+  const 위치=document.getElementById('opAddress').value||'(주소 미입력)';
+  const 건축주=document.getElementById('opOwner').value||'(성명 미입력)';
+  const 검토자=document.getElementById('opReviewer').value||'(성명 미입력)';
+  const today=new Date().toLocaleDateString('ko-KR',{year:'numeric',month:'2-digit',day:'2-digit'});
+
+  const 등급결과 = _fpLastResults.find(r=>r.명칭==='소방안전관리대상물 등급'||r.명칭==='소방안전관리대상물 해당여부');
+  const 보조자결과 = _fpLastResults.find(r=>r.명칭==='소방안전관리보조자');
+
+  const br='─'.repeat(40);
+  const 요약=(()=>{
+    const tmp=document.createElement('div');
+    tmp.innerHTML=_fpLastSummary;
+    return tmp.innerText||tmp.textContent||'';
+  })().replace(/[|｜]/g,'·').replace(/\s{2,}/g,' ').trim();
+
+  const lines=[
+    '소방안전관리자 선임기준 검토의견서 (초안)',
+    br,
+    '',
+    '■ 대상 건축물',
+    '  건물명: '+건물명,
+    '  대지 위치: '+위치,
+    '  건축주: '+건축주,
+    '  '+요약,
+    '',
+    '■ 검토 근거',
+    '  화재의 예방 및 안전관리에 관한 법률 시행령 별표4, 별표5',
+    '  (2026.07.01 시행, 대통령령 제36432호)',
+    '',
+    '■ 검토 결과',
+    '  소방안전관리대상물 등급: '+(_fpLastGrade||'해당없음'),
+    '',
+    '【소방안전관리자】',
+    등급결과 ? '  '+등급결과.설명 : '  해당 없음',
+    '',
+    '【소방안전관리보조자】',
+    보조자결과 ? '  '+보조자결과.설명 : '  해당 없음',
+    '',
+    '■ 종합 의견',
+    _fpLastGrade
+      ? '  위 건축물은 '+_fpLastGrade+' 소방안전관리대상물로 판단되며, 소방안전관리자(해당 시 보조자 포함)를'
+      : '  위 건축물은 입력된 조건상 소방안전관리대상물에 해당하지 않는 것으로 판단됩니다.',
+    _fpLastGrade ? '  선임하여야 합니다. 선임 자격 요건은 시행령 별표4 나목을 확인하여 개별 판단하시기 바랍니다.' : '',
+    '',
+    '■ 주의사항',
+    '  본 검토의견서는 자동 생성된 초안으로 법적 효력이 없습니다.',
+    '  소방안전관리자·보조자의 개인 자격요건(경력·자격증)은 판정하지 않았으니,',
+    '  반드시 담당자가 원문 법령을 확인하고 최종 판단하시기 바랍니다.',
+    '',
+    '  검토일: '+today,
+    '  검토자: '+검토자,
+    '',
+    br,
+    '※ 트리렙시(소방 3법 설치기준 판단도구) v1.0 초안 | 작성: 작은마을 다이브',
+  ];
+
+  document.getElementById('opinionOutput').textContent=lines.join('\n');
+
+  ['opBuildingName','opAddress','opOwner','opReviewer'].forEach(id=>{
+    document.getElementById(id).oninput=refreshOpinion;
   });
 }
 async function copyOpinion(){
