@@ -567,6 +567,7 @@
     <button class="main-tab" onclick="switchMainTab('dj')">다중이용업소 안전시설</button>
     <button class="main-tab" onclick="switchMainTab('wm')">위험물 소화·경보설비</button>
     <button class="main-tab" onclick="switchMainTab('fp')">화재예방법 소방안전관리</button>
+    <button class="main-tab" onclick="switchMainTab('gr')">기존건축물 소급기준</button>
   </div>
 
   <!-- 소방시설 패널 -->
@@ -1632,6 +1633,121 @@
   </div>
 
   </div><!-- /fpPanel -->
+
+  <div id="grPanel" class="main-panel">
+
+  <div class="howto">
+    <div class="howto-head" onclick="toggle(this)">
+      <i class="ti ti-help-circle"></i> 사용 방법
+      <span class="chevron">▼</span>
+    </div>
+    <div class="howto-body">
+      <ol>
+        <li>이 탭은 <b>이미 지어진 건축물</b>이 신축(사용승인) 당시 기준으로 어떤 소방시설 설치의무가 있었는지, 그리고 현재 강제로 소급 적용되는 항목은 무엇인지 판단합니다. 다른 탭(현재 기준 판단)과는 완전히 별개로 동작합니다.</li>
+        <li><b>신축(사용승인)일자</b>와 용도·연면적·층수 등 건물 정보를 입력하세요.</li>
+        <li>소방시설법 제13조에 따라 원칙은 "신축 당시 기준"을 유지하지만(소급 배제), 시행령 제13조가 정한 4가지(공동구·지하구, 노유자시설, 의료시설)는 신축 시기와 무관하게 <b>항상 최신 기준</b>이 적용됩니다. 이 탭은 두 가지를 함께 표시합니다.</li>
+        <li><b>구현 범위(2단계):</b> 1968.1.15 이후 전 구간의 옥내소화전·옥외소화전을 정밀 판정합니다(옥외소화전의 1981.11.6 이전 판정에는 건축물 구조 입력이 필요). 스프링클러는 2018.1.18(6층 이상 확대), 자동화재탐지설비는 2022.12.1(6층 이상·공동주택 전층 신설) 기준의 층수 조항만 정밀 판정하며, 그 외 세부 항목(판매·노유자·의료시설 등 개별 면적기준)은 개정이 매우 잦아 "확인필요"로 안내합니다.</li>
+        <li><b>기준 구분</b>에서 신축·증축·용도변경을 선택하세요. 증축은 시행령 제15조에 따라 원칙적으로 건물 전체에 증축 당시 기준이 적용되며, 기존부분과 내화구조로 구획된 경우에만 기존부분이 종전 기준을 유지합니다. 용도변경은 원칙적으로 변경된 부분에만 변경 당시 기준이 적용됩니다.</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="notice">
+    <i class="ti ti-info-circle"></i>
+    <strong>적용 안내:</strong> 소방시설 설치 및 관리에 관한 법률 제13조(소방시설기준 적용의 특례) 및 같은 법 시행령 제13조·별표4를 기준으로 합니다.
+    이 도구의 판정은 참고용이며, 실제 소급적용 여부의 최종 확인은 관할 소방서에서 받으시기 바랍니다.
+  </div>
+
+  <div class="card">
+    <p class="section-label">기준시점 · 건물 정보 입력</p>
+    <div class="input-grid">
+      <div class="field">
+        <label>기준 구분</label>
+        <select id="gr기준구분" onchange="document.getElementById('gr증축필드').style.display=(this.value==='증축')?'':'none'; document.getElementById('gr기준일자라벨').textContent=({'신축':'신축(사용승인)일자','증축':'증축(사용승인)일자','용도변경':'용도변경일자'})[this.value];">
+          <option value="신축">신축(전체)</option>
+          <option value="증축">증축</option>
+          <option value="용도변경">용도변경</option>
+        </select>
+      </div>
+      <div class="field"><label id="gr기준일자라벨">신축(사용승인)일자</label><input type="date" id="gr기준일자"></div>
+      <div class="field">
+        <label>주용도</label>
+        <select id="gr용도">
+          <option value="기타">기타</option>
+          <option value="근린생활">근린생활시설</option>
+          <option value="위락">위락시설</option>
+          <option value="판매">판매시설</option>
+          <option value="숙박">숙박시설</option>
+          <option value="노유자_생활시설">노유자 생활시설</option>
+          <option value="노유자_기타">노유자시설(기타)</option>
+          <option value="종합병원_병원">종합병원·병원</option>
+          <option value="요양병원">요양병원</option>
+          <option value="격리병원">격리병원</option>
+          <option value="정신의료기관">정신의료기관</option>
+          <option value="업무">업무시설</option>
+          <option value="방송통신">방송통신시설</option>
+          <option value="공장">공장</option>
+          <option value="창고">창고시설</option>
+          <option value="운수">운수시설</option>
+          <option value="복합건축물">복합건축물</option>
+          <option value="아파트등">공동주택(아파트등)</option>
+          <option value="지하구">지하구</option>
+          <option value="공동구">공동구</option>
+        </select>
+      </div>
+      <div class="field"><label>연면적</label><input type="text" id="gr연면적" placeholder="예: 5000 (㎡)"></div>
+      <div class="field"><label>지상층수</label><input type="text" id="gr지상층수" placeholder="예: 5 (층)"></div>
+      <div class="field"><label>지하층수</label><input type="text" id="gr지하층수" placeholder="예: 1 (층, 없으면 비워둠)"></div>
+      <div class="field"><label>지하·무창·4층이상 층 중 최대 바닥면적</label><input type="text" id="gr무창층최대" placeholder="예: 700 (㎡, 모르면 비워둠)"></div>
+      <div class="field"><label>특수가연물 저장·취급 배수</label><input type="text" id="gr특수가연물배수" placeholder="예: 800 (지정수량의 배수, 공장·창고만 해당)"></div>
+      <div class="field"><label>옥상 차고·주차장 면적</label><input type="text" id="gr옥상주차장면적" placeholder="예: 250 (㎡, 없으면 비워둠)"></div>
+      <div class="field"><label>터널 길이</label><input type="text" id="gr터널길이" placeholder="예: 1200 (m, 터널만 해당)"></div>
+      <div class="field">
+        <label>건축물 구조 <span style="font-weight:400;color:var(--text-muted);">(1981.11.6 이전 옥외소화전 판정에만 사용)</span></label>
+        <select id="gr건축구조">
+          <option value="">모름 / 해당없음</option>
+          <option value="내화">내화구조</option>
+          <option value="방화">방화구조·준내화구조</option>
+          <option value="기타">기타구조</option>
+        </select>
+      </div>
+    </div>
+    <div class="check-grid" style="margin-top:0.75rem;">
+      <label class="check-item"><input type="checkbox" id="gr국가유산">
+        <span class="cb-content"><span class="cb-label">보물·국보 지정 목조건축물</span></span>
+      </label>
+    </div>
+    <div id="gr증축필드" style="display:none;margin-top:0.75rem;padding:10px;background:var(--surface-1);border-radius:var(--radius);border:1px solid var(--border);">
+      <label class="check-item"><input type="checkbox" id="gr증축내화구획">
+        <span class="cb-content"><span class="cb-label">기존부분과 증축부분이 내화구조 바닥·벽으로 구획되어 있음</span><span class="cb-desc">시행령 제15조제1항 — 구획된 경우 기존부분은 증축 당시 기준이 적용되지 않고 종전 기준이 그대로 유지됩니다.</span></span>
+      </label>
+    </div>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn-run" onclick="grRun()">
+      <i class="ti ti-search"></i> 소급기준 판단
+    </button>
+    <button class="btn-reset" onclick="grReset()">
+      <i class="ti ti-refresh"></i> 초기화
+    </button>
+  </div>
+
+  <!-- 결과 -->
+  <div id="grResult" style="display:none;">
+    <div class="building-summary" id="grSummary"></div>
+    <div class="card" style="padding:1.25rem;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem; flex-wrap:wrap; gap:8px;">
+        <p class="section-label" style="margin-bottom:0;">판단 결과</p>
+        <button class="btn-opinion" onclick="openOpinion('gr')">
+          <i class="ti ti-file-text" aria-hidden="true"></i> 검토의견서 초안
+        </button>
+      </div>
+      <div id="grResultList"></div>
+    </div>
+  </div>
+
+  </div><!-- /grPanel -->
 
   <!-- 푸터 -->
   <div class="footer">
@@ -2823,12 +2939,13 @@ function run(){
 /* ══ 메인 탭 전환 ══ */
 function switchMainTab(tab){
   document.querySelectorAll('.main-tab').forEach((t,i)=>{
-    t.classList.toggle('active',(tab==='fire'&&i===0)||(tab==='dj'&&i===1)||(tab==='wm'&&i===2)||(tab==='fp'&&i===3));
+    t.classList.toggle('active',(tab==='fire'&&i===0)||(tab==='dj'&&i===1)||(tab==='wm'&&i===2)||(tab==='fp'&&i===3)||(tab==='gr'&&i===4));
   });
   document.getElementById('firePanel').classList.toggle('show', tab==='fire');
   document.getElementById('djPanel').classList.toggle('show', tab==='dj');
   document.getElementById('wmPanel').classList.toggle('show', tab==='wm');
   document.getElementById('fpPanel').classList.toggle('show', tab==='fp');
+  document.getElementById('grPanel').classList.toggle('show', tab==='gr');
 }
 
 /* ══ 다중이용업소 판단 ══ */
@@ -3898,6 +4015,313 @@ function fpRun(){
   _fpLastSummary = document.getElementById('fpSummary').innerHTML;
 }
 
+/* ══════════════════════════════════════════════════════════════════
+   5번째 탭: 기존건축물 소급기준 판단 (gr)
+   ─ 완전 독립 탭. rules.json(ACTIVE_RULES)과 무관한 별도 하드코딩 로직.
+   ─ 1단계 구현 범위 (2026-07-31 기준):
+     · 신축(전체) 케이스만 판단. 증축·용도변경 특례(시행령 제15조)는 다음 단계.
+     · 1992.7.28 이후 신축 건축물만 정밀 판정. 그 이전은 "확인필요" 안내.
+     · 옥내소화전·옥외소화전설비만 정밀 판정 (근거: "연도별 소방시설 설치 대상연혁"
+       자료 원문 대조 완료 — 옥외소화전은 92.7.28 이후 미변경, 옥내소화전은
+       99.2.5 옥상주차장·터널 조항 추가 전/후 2단계로 구분).
+     · 스프링클러·자동화재탐지설비는 92.7.28~현재 사이 개정이 매우 잦아(8회 이상)
+       이번 단계에서는 자동판정하지 않고 "확인필요"로 안내 (2단계에서 세분화 예정).
+     · 시행령 제13조(강화된 소방시설기준의 적용대상) 4개 항목은 신축 시기와
+       무관하게 항상 최신 기준이 적용되므로 별도로 표시.
+   ══════════════════════════════════════════════════════════════════ */
+let _grLastResults = [], _grLastSummary = '';
+
+function grReset(){
+  ['gr기준일자','gr연면적','gr지상층수','gr지하층수','gr무창층최대','gr특수가연물배수','gr옥상주차장면적','gr터널길이'].forEach(id=>{
+    const el=document.getElementById(id); if(el) el.value='';
+  });
+  const 용도el=document.getElementById('gr용도'); if(용도el) 용도el.value='기타';
+  const 기준구분el=document.getElementById('gr기준구분'); if(기준구분el) 기준구분el.value='신축';
+  const 건축구조el=document.getElementById('gr건축구조'); if(건축구조el) 건축구조el.value='';
+  const 국가유산el=document.getElementById('gr국가유산'); if(국가유산el) 국가유산el.checked=false;
+  const 증축내화구획el=document.getElementById('gr증축내화구획'); if(증축내화구획el) 증축내화구획el.checked=false;
+  document.getElementById('gr증축필드').style.display='none';
+  document.getElementById('gr기준일자라벨').textContent='신축(사용승인)일자';
+  document.getElementById('grResult').style.display='none';
+}
+
+function grRun(){
+  const 기준일자문자 = document.getElementById('gr기준일자').value;
+  if(!기준일자문자){ alert('기준일자를 입력해주세요.'); return; }
+  const 기준구분 = document.getElementById('gr기준구분').value; // 신축 | 증축 | 용도변경
+  const 증축내화구획 = document.getElementById('gr증축내화구획').checked;
+  const 건축구조 = document.getElementById('gr건축구조').value; // '' | 내화 | 방화 | 기타
+  const 용도el = document.getElementById('gr용도');
+  const 용도 = 용도el.value;
+  const 용도라벨 = 용도el.options[용도el.selectedIndex].text;
+  const 연면적 = parseNum(document.getElementById('gr연면적').value)||0;
+  const 지상 = parseNum(document.getElementById('gr지상층수').value)||0;
+  const 지하 = parseNum(document.getElementById('gr지하층수').value)||0;
+  const 무창층최대 = parseNum(document.getElementById('gr무창층최대').value)||0;
+  const 특수가연물배수 = parseNum(document.getElementById('gr특수가연물배수').value)||0;
+  const 옥상주차장면적 = parseNum(document.getElementById('gr옥상주차장면적').value)||0;
+  const 터널길이 = parseNum(document.getElementById('gr터널길이').value)||0;
+  const 국가유산 = document.getElementById('gr국가유산').checked;
+
+  if(!연면적 && !지상 && !지하){
+    alert('연면적 또는 층수를 입력해주세요.');
+    return;
+  }
+
+  const D = s => new Date(s+'T00:00:00');
+  const 기준일 = D(기준일자문자);
+  if(isNaN(기준일.getTime())){
+    alert('일자 형식을 확인해주세요.');
+    return;
+  }
+  const 시대경계 = {
+    최초제정: D('1968-01-15'),
+    옥내1981: D('1981-11-06'),
+    최소기준일92: D('1992-07-28'),
+    옥내신법: D('1999-02-05'),
+    옥외1981: D('1981-11-06'),
+    스프링클러6층: D('2018-01-18'),
+    자탐6층전층: D('2022-12-01'),
+  };
+
+  const 특정용도군 = ['근린생활','위락','판매','숙박','노유자_생활시설','노유자_기타','종합병원_병원','요양병원','격리병원','정신의료기관','업무','방송통신','공장','창고','운수','복합건축물'];
+  const 노유자용도 = ['노유자_생활시설','노유자_기타'];
+  const 의료용도 = ['종합병원_병원','요양병원','격리병원','정신의료기관'];
+  const 지하구공동구용도 = ['지하구','공동구'];
+  const 공동주택류용도 = ['아파트등'];
+
+  const results=[];
+  function gradd(명칭,뱃지클래스,뱃지텍스트,설명,근거){ results.push({명칭,뱃지클래스,뱃지텍스트,설명,근거}); }
+
+  // 기준구분(신축/증축/용도변경) 안내 — 시행령 제15조
+  if(기준구분==='증축'){
+    if(증축내화구획){
+      gradd('적용범위 안내: 증축(내화구조 구획)','badge-check','확인필요',
+        `시행령 제15조제1항에 따라 기존부분과 증축부분이 내화구조 바닥·벽으로 구획된 경우, 기존부분에는 증축 당시 기준이 적용되지 않고 종전 기준이 그대로 유지됩니다. 아래 판정 결과는 <b>증축된 부분에만</b> 적용하세요. 기존부분의 기준은 기존부분이 지어진 시점을 기준일자로 다시 조회하세요.`,
+        '시행령 제15조제1항 단서');
+    } else {
+      gradd('적용범위 안내: 증축(구획 없음)','badge-check','확인필요',
+        `시행령 제15조제1항 원칙에 따라 기존부분과 증축부분이 내화구조로 구획되어 있지 않으므로, 건물 전체(기존부분 포함)에 증축 당시 기준이 적용됩니다. 아래 판정 결과는 건물 전체에 적용됩니다.`,
+        '시행령 제15조제1항');
+    }
+  } else if(기준구분==='용도변경'){
+    gradd('적용범위 안내: 용도변경','badge-check','확인필요',
+      `시행령 제15조제2항 원칙에 따라 용도변경된 부분에만 용도변경 당시 기준이 적용됩니다(건물 전체가 아님). 다만 화재연소 확대 요인이 적어지거나 가연성 물질이 줄어드는 방향의 용도변경 등 단서에 해당하면 건물 전체에 적용될 수 있습니다 — 해당 여부는 관할 소방서에 확인하세요.`,
+      '시행령 제15조제2항');
+  }
+
+  if(기준일 < 시대경계.최초제정){
+    gradd('적용범위 안내','badge-check','확인필요',
+      `입력하신 기준일(${기준일자문자})은 1968.1.15(소방시설법 최초 시행) 이전입니다. 이 도구가 다루는 범위 밖이므로 관할 소방서 확인이 필요합니다. (아래 강제소급 항목은 기준일과 무관하게 적용됩니다.)`,
+      '소방법 (1958년 제정, 1968.1.15 이전 자료 미확보)');
+  } else {
+    // ── 옥외소화전설비 — 층별(1·2층 합계) 입력을 받지 않는 탭이라 항상 "확인필요"로 표시하되, 시대별 정확한 기준 수치를 안내
+    let 옥외안내, 옥외근거;
+    if(기준일 >= 시대경계.최소기준일92){
+      옥외안내 = '지상 1·2층 바닥면적 합계 9,000㎡ 이상, 국가유산 목조건축물, 특수가연물 750배 이상 등 (1992.7.28 이후 미변경 — 현재 소방시설법 탭과 동일)';
+      옥외근거 = '시행령 별표4 제1호사목 (1992.7.28 이후 미변경)';
+    } else if(기준일 >= 시대경계.옥외1981){
+      옥외안내 = '바닥면적(지상 1개층뿐이면 1층, 2개층 이상이면 1·2층 합계) 9,000㎡ 이상 또는 연면적 1,000㎡ 이상 (1981.11.6~1992.7.27 기준)';
+      옥외근거 = '연도별 소방시설 설치 대상연혁 자료 (1981.11.6 개정)';
+    } else {
+      const 구조기준 = {내화:'내화건축물 9,000㎡ 이상', 방화:'방화구조·준내화건축물 6,000㎡ 이상', 기타:'기타구조 건축물 3,000㎡ 이상'};
+      옥외안내 = 건축구조
+        ? `${구조기준[건축구조]} (지상 1개층뿐이면 1층, 2개층 이상이면 1·2층 합계 기준 — 1968.1.15~1981.11.5 기준)`
+        : '건축물 구조(내화/방화·준내화/기타)에 따라 3,000~9,000㎡ 이상으로 기준이 다릅니다(1968.1.15~1981.11.5 기준). 위 입력란에서 건축물 구조를 선택하면 정확한 수치를 안내합니다.';
+      옥외근거 = '연도별 소방시설 설치 대상연혁 자료 (1968.1.15 제정)';
+    }
+    gradd('옥외소화전설비','badge-check','확인필요(참고 수치 제공)',
+      `이 탭은 층별 면적을 입력받지 않아 자동판정하지 않습니다. 참고 기준: ${옥외안내}. 정확한 판정은 소방시설법 탭에서 층별 면적을 입력해 확인하세요.`,
+      옥외근거);
+
+    // ── 옥내소화전설비 — 92.7.28 이후는 정밀판정, 이전은 근사판정(용도군 세분류가 현재와 달라 근사치)
+    let 옥내사유목록 = [], 옥내근거, 옥내근사여부=false;
+    if(기준일 >= 시대경계.최소기준일92){
+      const 옥내신법 = 기준일 >= 시대경계.옥내신법;
+      if(연면적>=3000) 옥내사유목록.push(`연면적 ${연면적.toLocaleString()}㎡ (3천㎡ 이상)`);
+      if(무창층최대>=600) 옥내사유목록.push(`지하·무창·4층이상 층 바닥면적 ${무창층최대.toLocaleString()}㎡ (600㎡ 이상)`);
+      if(특정용도군.includes(용도) && 연면적>=1500) 옥내사유목록.push(`${용도라벨} 연면적 ${연면적.toLocaleString()}㎡ (1천5백㎡ 이상)`);
+      if(특정용도군.includes(용도) && 무창층최대>=300) 옥내사유목록.push(`${용도라벨} 지하·무창·4층이상 층 ${무창층최대.toLocaleString()}㎡ (300㎡ 이상)`);
+      if(['공장','창고'].includes(용도) && 특수가연물배수>=750) 옥내사유목록.push(`특수가연물 ${특수가연물배수.toLocaleString()}배 취급 (750배 이상)`);
+      if(옥내신법 && 옥상주차장면적>=200) 옥내사유목록.push(`옥상 차고·주차장 ${옥상주차장면적.toLocaleString()}㎡ (200㎡ 이상)`);
+      if(옥내신법 && 터널길이>=1000) 옥내사유목록.push(`터널 길이 ${터널길이.toLocaleString()}m (1천m 이상)`);
+      옥내근거 = 옥내신법
+        ? '시행령 별표4 제1호다목 (1999.2.5 이후 — 옥상주차장·터널 조항 포함)'
+        : '시행령 별표4 제1호다목 (1992.7.28~1999.2.4 — 이 시기에는 옥상주차장·터널 관련 조항이 없었습니다)';
+    } else if(기준일 >= 시대경계.옥내1981){
+      // 1981.11.6~1992.7.27
+      옥내근사여부 = true;
+      if(용도==='창고'){
+        if(연면적>=2100) 옥내사유목록.push(`창고 연면적 ${연면적.toLocaleString()}㎡ (2천1백㎡ 이상)`);
+        if(무창층최대>=450) 옥내사유목록.push(`창고 지하·무창·4층이상 층 ${무창층최대.toLocaleString()}㎡ (450㎡ 이상)`);
+      } else if(특정용도군.includes(용도)){
+        if(연면적>=1500) 옥내사유목록.push(`${용도라벨} 연면적 ${연면적.toLocaleString()}㎡ (1천5백㎡ 이상, 근사)`);
+        if(무창층최대>=300) 옥내사유목록.push(`${용도라벨} 지하·무창·4층이상 층 ${무창층최대.toLocaleString()}㎡ (300㎡ 이상, 근사)`);
+      } else {
+        if(연면적>=3000) 옥내사유목록.push(`연면적 ${연면적.toLocaleString()}㎡ (3천㎡ 이상, 근사)`);
+        if(무창층최대>=600) 옥내사유목록.push(`지하·무창·4층이상 층 ${무창층최대.toLocaleString()}㎡ (600㎡ 이상, 근사)`);
+      }
+      if(['공장','창고'].includes(용도) && 특수가연물배수>=750) 옥내사유목록.push(`특수가연물 ${특수가연물배수.toLocaleString()}배 취급 (750배 이상)`);
+      옥내근거 = '연도별 소방시설 설치 대상연혁 자료 (1981.11.6 개정, 용도군 근사 적용)';
+    } else {
+      // 1968.1.15~1981.11.5
+      옥내근사여부 = true;
+      if(용도==='위락'){
+        if(연면적>=700) 옥내사유목록.push(`위락시설 연면적 ${연면적.toLocaleString()}㎡ (700㎡ 이상)`);
+        if(무창층최대>=150) 옥내사유목록.push(`위락시설 지하·무창·4층이상 층 ${무창층최대.toLocaleString()}㎡ (150㎡ 이상)`);
+      } else if(특정용도군.includes(용도) || 용도==='기타'){
+        if(연면적>=1000) 옥내사유목록.push(`연면적 ${연면적.toLocaleString()}㎡ (1천㎡ 이상, 근사 — 사찰·교회급 기준)`);
+      }
+      if(['공장','창고'].includes(용도) && 특수가연물배수>=750) 옥내사유목록.push(`특수가연물 ${특수가연물배수.toLocaleString()}배 취급 (750배 이상)`);
+      옥내근거 = '연도별 소방시설 설치 대상연혁 자료 (1968.1.15 제정, 용도군 근사 적용)';
+    }
+
+    if(옥내사유목록.length){
+      gradd('옥내소화전설비', 'badge-required', 옥내근사여부?'설치필요(근사판정)':'설치필요',
+        `기준일(${기준일자문자}) 기준 설치의무 대상 — ${옥내사유목록.join(', ')}.`+(옥내근사여부?' ※ 이 시기는 현재의 용도 분류와 체계가 달라 근사적으로 적용한 결과이니 정밀 확인을 권장합니다.':''),
+        옥내근거);
+    } else {
+      gradd('옥내소화전설비', 'badge-unnecessary', 옥내근사여부?'해당없음(근사판정)':'해당없음',
+        `기준일(${기준일자문자}) 기준 입력된 조건으로는 설치의무 대상이 아닙니다.`+(옥내근사여부?' ※ 이 시기는 현재의 용도 분류와 체계가 달라 근사적으로 적용한 결과이니 정밀 확인을 권장합니다.':''),
+        옥내근거);
+    }
+
+    // ── 스프링클러설비 — 2018.1.18(6층이상 확대)만 정밀판정, 그 외 세부항목은 확인필요
+    if(기준일 >= 시대경계.스프링클러6층){
+      if(지상>=6){
+        gradd('스프링클러설비','badge-required','설치필요(층수기준)',
+          `지상 ${지상}층 (6층 이상, 2018.1.18 이후 기준). 이 조건 외 판매·노유자·의료시설 등 개별 면적기준은 별도 확인이 필요합니다.`,
+          '시행령 별표4 제1호라목 1) (2017.1.26 개정, 2018.1.18 시행)');
+      } else {
+        gradd('스프링클러설비','badge-check','확인필요(층수기준 미해당)',
+          `지상 ${지상}층으로 6층 이상 조항(2018.1.18 이후)에는 해당하지 않습니다. 다만 판매·노유자·의료시설·복합건축물 등 개별 면적기준에 해당할 수 있어 자동판정하지 않습니다. 신축일(${기준일자문자}) 기준 정확한 판정은 연도별 소방시설 설치 대상연혁 원문 확인이 필요합니다.`,
+          '시행령 별표4 제1호라목 (개별 항목 세분화 예정)');
+      }
+    } else if(기준일 >= 시대경계.최소기준일92){
+      if(지상>=11){
+        gradd('스프링클러설비','badge-required','설치필요(층수기준, 근사)',
+          `지상 ${지상}층 (11층 이상, 2018.1.18 이전 구법 기준). 이 조건 외 판매·노유자·의료시설 등 개별 면적기준은 별도 확인이 필요합니다.`,
+          '연도별 소방시설 설치 대상연혁 자료 (1992.7.28~2018.1.17 — 11층 이상 기준)');
+      } else {
+        gradd('스프링클러설비','badge-check','확인필요(2단계 예정)',
+          `1992.7.28~2018.1.17 사이 구법 기준(11층 이상 외 판매·노유자·의료시설 등 개별 항목)은 개정이 매우 잦아 이번 단계에서는 자동판정하지 않습니다. 신축일(${기준일자문자}) 기준 정확한 판정은 연도별 소방시설 설치 대상연혁 원문 또는 관할 소방서 확인이 필요합니다.`,
+          '시행령 별표4 제1호라목 (연혁 세분화 예정)');
+      }
+    } else {
+      gradd('스프링클러설비','badge-check','확인필요(범위 밖)',
+        `1992.7.28 이전 스프링클러 기준은 아직 이 도구에 반영되지 않았습니다. 연도별 소방시설 설치 대상연혁 원문 또는 관할 소방서 확인이 필요합니다.`,
+        '시행령 별표4 제1호라목 (1992.7.28 이전 미반영)');
+    }
+
+    // ── 자동화재탐지설비 — 2022.12.1(6층이상+공동주택등 전층 신설)만 정밀판정, 그 외 세부항목은 확인필요
+    if(기준일 >= 시대경계.자탐6층전층){
+      let 자탐사유=[];
+      if(지상>=6) 자탐사유.push(`지상 ${지상}층 (6층 이상)`);
+      if(공동주택류용도.includes(용도) || 용도==='기숙사' || 용도==='숙박') 자탐사유.push(`${용도라벨} 모든 층 (2022.12.1 이후 신설)`);
+      if(자탐사유.length){
+        gradd('자동화재탐지설비','badge-required','설치필요(층수·용도기준)',
+          `기준일(${기준일자문자}) 기준 — ${자탐사유.join(', ')} (2022.12.1 이후 기준). 이 조건 외 개별 면적기준은 별도 확인이 필요합니다.`,
+          '시행령 별표4 제2호다목 (2022.11.29 개정, 2022.12.1 시행)');
+      } else {
+        gradd('자동화재탐지설비','badge-check','확인필요(층수·용도기준 미해당)',
+          `6층 이상 또는 공동주택·기숙사·숙박시설 전층 조항(2022.12.1 이후)에는 해당하지 않습니다. 다만 근린생활·의료·노유자시설 등 개별 면적기준에 해당할 수 있어 자동판정하지 않습니다.`,
+          '시행령 별표4 제2호다목 (개별 항목 세분화 예정)');
+      }
+    } else if(기준일 >= 시대경계.최소기준일92){
+      gradd('자동화재탐지설비','badge-check','확인필요(2단계 예정)',
+        `1992.7.28~2022.11.30 사이 자탐 기준은 6층 이상·공동주택 전층 조항이 없었고, 그 외 개별 항목(근린생활·의료·노유자시설 등)은 개정이 매우 잦아 이번 단계에서는 자동판정하지 않습니다. 신축일(${기준일자문자}) 기준 정확한 판정은 연도별 소방시설 설치 대상연혁 원문 또는 관할 소방서 확인이 필요합니다.`,
+        '시행령 별표4 제2호다목 (연혁 세분화 예정)');
+    } else {
+      gradd('자동화재탐지설비','badge-check','확인필요(범위 밖)',
+        `1992.7.28 이전 자동화재탐지설비 기준은 아직 이 도구에 반영되지 않았습니다. 연도별 소방시설 설치 대상연혁 원문 또는 관할 소방서 확인이 필요합니다.`,
+        '시행령 별표4 제2호다목 (1992.7.28 이전 미반영)');
+    }
+  }
+
+  // 시행령 제13조 강제소급 4항목 — 신축일과 무관하게 항상 최신 기준 적용
+  if(지하구공동구용도.includes(용도)){
+    gradd('강제소급 적용: 공동구·지하구','badge-required','소급적용',
+      `${용도라벨}는 시행령 제13조에 따라 신축 시기와 관계없이 항상 최신 기준이 적용됩니다 — 소화기·자동소화장치·자동화재탐지설비·통합감시시설·유도등·연소방지설비.`,
+      '시행령 제13조 제1호·제2호 (법 제13조제1항제2호 위임)');
+  }
+  if(노유자용도.includes(용도)){
+    gradd('강제소급 적용: 노유자시설','badge-required','소급적용',
+      `${용도라벨}는 시행령 제13조에 따라 신축 시기와 관계없이 항상 최신 기준이 적용됩니다 — 간이스프링클러설비·자동화재탐지설비·단독경보형감지기.`,
+      '시행령 제13조 제3호');
+  }
+  if(의료용도.includes(용도)){
+    gradd('강제소급 적용: 의료시설','badge-required','소급적용',
+      `${용도라벨}는 시행령 제13조에 따라 신축 시기와 관계없이 항상 최신 기준이 적용됩니다 — 스프링클러설비·간이스프링클러설비·자동화재탐지설비·자동화재속보설비.`,
+      '시행령 제13조 제4호');
+  }
+  if(국가유산){
+    gradd('참고: 국가유산 목조건축물','badge-check','확인필요',
+      '보물·국보로 지정된 목조건축물은 옥외소화전설비 설치대상입니다(1992.7.28 이후 미변경). 정확한 판정은 소방시설법 탭에서 확인하세요.',
+      '시행령 별표4 제1호사목 2)');
+  }
+
+  // 요약
+  const 기준구분라벨 = {'신축':'신축일','증축':'증축일','용도변경':'용도변경일'}[기준구분]||'기준일';
+  document.getElementById('grSummary').innerHTML =
+    `${기준구분라벨} <strong>${기준일자문자}</strong> &nbsp;|&nbsp; ${용도라벨} &nbsp;|&nbsp; `+
+    (지상||지하?`<strong>지상 ${지상}층${지하?` / 지하 ${지하}층`:''}</strong>`:'층수 미입력')+
+    (연면적?` &nbsp;|&nbsp; <strong>${연면적.toLocaleString()}㎡</strong>`:'');
+
+  const list = document.getElementById('grResultList');
+  list.innerHTML='';
+  results.forEach(r=>{
+    const el=document.createElement('div'); el.className='result-item';
+    el.innerHTML=`<div class="result-head" onclick="toggle(this)"><span class="badge ${r.뱃지클래스}">${r.뱃지텍스트}</span><span class="result-name">${r.명칭}</span><i class="ti ti-chevron-down chevron"></i></div>
+      <div class="result-body"><div>${r.설명}</div><div class="basis" style="margin-top:8px;">근거 조문: <span>${r.근거}</span></div></div>`;
+    list.appendChild(el);
+  });
+
+  document.getElementById('grResult').style.display='';
+  document.getElementById('grResult').scrollIntoView({behavior:'smooth',block:'start'});
+
+  // 검토의견서용 데이터 저장
+  _grLastResults = results;
+  _grLastSummary = document.getElementById('grSummary').innerHTML;
+}
+
+function generateGrOpinion(){
+  const 건물명=document.getElementById('opBuildingName').value||'(건물명 미입력)';
+  const 위치=document.getElementById('opAddress').value||'(주소 미입력)';
+  const 건축주=document.getElementById('opOwner').value||'(성명 미입력)';
+  const 검토자=document.getElementById('opReviewer').value||'(성명 미입력)';
+  const today=new Date().toLocaleDateString('ko-KR',{year:'numeric',month:'2-digit',day:'2-digit'});
+
+  const 설치필요 = _grLastResults.filter(r=>r.뱃지클래스==='badge-required');
+  const 확인필요 = _grLastResults.filter(r=>r.뱃지클래스==='badge-check');
+
+  const 설치목록 = 설치필요.length
+    ? 설치필요.map((r,i)=>'  '+(i+1)+'. '+r.명칭+'\n     - 근거: '+r.근거+'\n     - 이유: '+r.설명).join('\n')
+    : '  해당 없음';
+  const 확인목록 = 확인필요.length
+    ? '\n\n【추가 확인 필요 사항】\n'+확인필요.map((r,i)=>'  '+(i+1)+'. '+r.명칭+': '+r.설명).join('\n')
+    : '';
+
+  const text =
+`[기존건축물 소급기준 검토의견서 — 초안]
+
+■ 건물 정보
+  - 건물명: ${건물명}
+  - 위치: ${위치}
+  - 건축주: ${건축주}
+  - 검토일: ${today}
+  - 검토자: ${검토자}
+  - 건물 개요: ${_grLastSummary.replace(/<[^>]+>/g,'')}
+
+■ 소급기준 판단 결과 (소방시설 설치 및 관리에 관한 법률 제13조·시행령 제13조 기준)
+${설치목록}${확인목록}
+
+※ 본 의견서는 트리렙시(TRILEPSI) 도구가 생성한 초안이며, 최종 판단은 관할 소방서 확인을 거쳐야 합니다.
+※ 옥내소화전은 1968.1.15~현재 전 구간, 옥외소화전은 시대별 참고수치, 스프링클러·자동화재탐지설비는 층수기준(6층 이상 등) 조항만 정밀 판정했습니다. 그 외 개별 면적기준(판매·노유자·의료시설 등)은 개정이 잦아 자동판정하지 않았으니 별도 확인이 필요합니다.
+※ 증축·용도변경의 경우 시행령 제15조에 따른 적용범위(전체/부분)를 위 안내를 참고해 판단하세요.`;
+
+  document.getElementById('opinionText').value = text;
+}
+
 function djToggle(head){
   head.nextElementSibling.classList.toggle('show');
   head.querySelector('.chevron').classList.toggle('open');
@@ -3954,6 +4378,9 @@ function openOpinion(tab){
   if(_opinionTab==='fp'){
     if(!_fpLastResults.length){ alert('먼저 판단을 실행해주세요.'); return; }
     generateFpOpinion();
+  } else if(_opinionTab==='gr'){
+    if(!_grLastResults.length){ alert('먼저 판단을 실행해주세요.'); return; }
+    generateGrOpinion();
   } else {
     if(!_lastResults.length){ alert('먼저 판단을 실행해주세요.'); return; }
     generateOpinion();
@@ -3962,7 +4389,9 @@ function openOpinion(tab){
   document.body.style.overflow='hidden';
 }
 function refreshOpinion(){
-  if(_opinionTab==='fp') generateFpOpinion(); else generateOpinion();
+  if(_opinionTab==='fp') generateFpOpinion();
+  else if(_opinionTab==='gr') generateGrOpinion();
+  else generateOpinion();
 }
 function closeOpinion(){
   document.getElementById('opinionModal').classList.remove('show');
